@@ -55,7 +55,7 @@ module.exports = {
       urls: {
         home: 'https://www.v2ex.com/',
         signin: 'https://www.v2ex.com/signin',
-        reedem: 'https://www.v2ex.com/mission/daily/redeem',
+        redeem: 'https://www.v2ex.com/mission/daily/redeem?once=71017',
         dailyMission: 'https://www.v2ex.com/mission/daily',
       },
       elements: {
