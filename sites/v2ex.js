@@ -1,6 +1,9 @@
+/* eslint no-console: 0 */
 const config = require('../config');
 
 const Nightmare = require('nightmare');
+Nightmare.Promise = require('bluebird');
+const rq = require('request-promise');
 
 const nightmare = Nightmare(config.nightmare);
 
@@ -16,12 +19,13 @@ const run = () => {
     .type(ELES.passwordInput, password)
     .click(ELES.loginButton)
     .wait(ELES.gotoDailySignin)
-    .click(ELES.gotoDailySignin)
-    .wait(ELES.dailySigninButton)
-    .click(ELES.dailySigninButton)
-    .wait(ELES.dailySigninResult)
-    .evaluate(selector => document.querySelector(selector).innerText, ELES.dailySigninResult)
-    .end();
+    .cookies.get({})
+    .end()
+    .then()
+    .map(cookieObj => `${cookieObj.name}=${cookieObj.value}`)
+    .tap(cookies => console.log(`cookies.length:${cookies.length}`))
+    .then(cookies => cookies.join('; '))
+    .then(cookie => rq({ url: URLS.reedem, headers: { cookie } }));
 };
 
 module.exports = {

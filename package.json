@@ -21,8 +21,11 @@
   },
   "homepage": "https://github.com/yidinghan/daily-signin#readme",
   "dependencies": {
+    "bluebird": "^3.5.0",
     "nightmare": "^2.10.0",
-    "nightmare-iframe-manager": "0.0.4"
+    "nightmare-iframe-manager": "0.0.4",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.0"
   },
   "devDependencies": {
     "eslint": "^3.16.1",
