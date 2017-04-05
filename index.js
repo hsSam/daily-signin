@@ -1,4 +1,4 @@
-/* eslint no-console: ["error", { allow: ["error"] }]  */
+/* eslint no-console: 0  */
 const config = require('./config');
 
 const siteOperator = module.require(`./sites/${config.site}`);
@@ -8,4 +8,4 @@ siteOperator.run()
     console.error('CATCH ERROR: ', error);
     process.exit(1);
   })
-  .then(result => process.stdout.write(`\n  result: \n${JSON.stringify(result)}`));
+  .then(console.log.bind(console, 'FINALLY: '));

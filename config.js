@@ -53,18 +53,24 @@ module.exports = {
     },
     v2ex: {
       urls: {
-        home: 'https://www.v2ex.com/',
+        home: 'https://www.v2ex.com',
         signin: 'https://www.v2ex.com/signin',
-        redeem: 'https://www.v2ex.com/mission/daily/redeem?once=71017',
+        redeem: 'https://www.v2ex.com/mission/daily/redeem',
         dailyMission: 'https://www.v2ex.com/mission/daily',
       },
       elements: {
+        loginForm: '#Main > div.box > div.cell > form',
         usernameInput: '#Main > div.box > div.cell > form > table > tbody > tr:nth-child(1) > td:nth-child(2) > input',
         passwordInput: '#Main > div.box > div.cell > form > table > tbody > tr:nth-child(2) > td:nth-child(2) > input',
         loginButton: '#Main > div.box > div.cell > form > table > tbody > tr:nth-child(3) > td:nth-child(2) > input.super.normal.button',
         gotoDailySignin: '#Rightbar > div:nth-child(4) > div > a',
         dailySigninButton: '#Main > div.box > div:nth-child(2) > input',
         dailySigninResult: '#Main > div.box > div.message',
+      },
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+        Origin: 'https://www.v2ex.com',
+        Referer: 'https://www.v2ex.com/signin',
       },
     },
   },

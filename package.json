@@ -22,6 +22,7 @@
   "homepage": "https://github.com/yidinghan/daily-signin#readme",
   "dependencies": {
     "bluebird": "^3.5.0",
+    "cheerio": "^0.22.0",
     "nightmare": "^2.10.0",
     "nightmare-iframe-manager": "0.0.4",
     "request": "^2.81.0",

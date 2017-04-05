@@ -1,31 +1,40 @@
 /* eslint no-console: 0 */
 const config = require('../config');
 
-const Nightmare = require('nightmare');
-Nightmare.Promise = require('bluebird');
-const rq = require('request-promise');
-
-const nightmare = Nightmare(config.nightmare);
+const cheerio = require('cheerio');
+const rq = require('request-promise').defaults({
+  jar: true,
+  headers: config.sites.v2ex.headers,
+});
 
 const { urls: URLS, elements: ELES } = config.sites.v2ex;
 
 const run = () => {
   const { username, password } = config.profile;
 
-  return nightmare
-    .goto(URLS.signin)
-    .wait(ELES.usernameInput)
-    .type(ELES.usernameInput, username)
-    .type(ELES.passwordInput, password)
-    .click(ELES.loginButton)
-    .wait(ELES.gotoDailySignin)
-    .cookies.get({})
-    .end()
-    .then()
-    .map(cookieObj => `${cookieObj.name}=${cookieObj.value}`)
-    .tap(cookies => console.log(`cookies.length:${cookies.length}`))
-    .then(cookies => cookies.join('; '))
-    .then(cookie => rq({ url: URLS.redeem, headers: { cookie } }));
+  const transform = body => cheerio.load(body);
+  return rq({ uri: URLS.signin, transform })
+    .then($ => $(ELES.loginForm).serializeArray())
+    .then(loginForm => ({
+      [loginForm[0].name]: username,
+      [loginForm[1].name]: password,
+      [loginForm[2].name]: loginForm[2].value,
+      [loginForm[3].name]: loginForm[3].value,
+    }))
+    .tap(form => console.log('v2ex:login form keys:', Object.keys(form)))
+    .then(form => rq({
+      method: 'POST',
+      uri: URLS.signin,
+      form,
+      transform,
+      simple: false,
+    }))
+    .then(() => rq(URLS.dailyMission, { transform }))
+    .tap($ => console.log('v2ex:continue singin', $('#Main > div.box > div:nth-child(3)').text()))
+    .then($ => $('#Main > div.box > div:nth-child(2) > input').attr('onclick'))
+    .then(onclickStr => /once=(.*?)'/.exec(onclickStr)[1])
+    .then(once => rq({ uri: URLS.redeem, qs: { once }, transform }))
+    .then($ => $('#Main > div.box > div.message').text());
 };
 
 module.exports = {
