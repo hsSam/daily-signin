@@ -33,7 +33,15 @@ const run = () => {
     .tap($ => console.log('v2ex:continue singin', $('#Main > div.box > div:nth-child(3)').text()))
     .then($ => $('#Main > div.box > div:nth-child(2) > input').attr('onclick'))
     .then(onclickStr => /once=(.*?)'/.exec(onclickStr)[1])
-    .then(once => rq({ uri: URLS.redeem, qs: { once }, transform }))
+    .tap(once => console.log('v2ex:redeem once', once))
+    .then(once => rq({
+      uri: URLS.redeem,
+      qs: { once },
+      transform,
+      headers: {
+        Referer: 'https://www.v2ex.com/mission/daily',
+      },
+    }))
     .then($ => $('#Main > div.box > div.message').text());
 };
 
